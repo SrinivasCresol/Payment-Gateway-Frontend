@@ -7,6 +7,8 @@ import ProductUpdate from "./Pages/ProductUpdate";
 import Home from "./Pages/Home";
 import Register from "./Pages/Register";
 import Cart from "./Pages/Cart";
+import Success from "./Components/Success";
+import Failure from "./Components/Failure";
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
         <Route path="/user" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/success" element={<Success />} />
+        <Route path="/cancel" element={<Failure />} />
       </Routes>
     </>
   );

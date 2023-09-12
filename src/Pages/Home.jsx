@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSocket } from "../ContextProvider/SocketProvider";
 import { getProductsFunction } from "../Services/Apis";
 import Header from "../Components/Header";
@@ -83,8 +83,9 @@ export default function Home() {
             ))}
           </div>
         </div>
-        <Cart products={cartItems} removeFromCart={removeFromCart} />
+        <Link to="/cart">Go To Cart</Link>
       </div>
+      <Cart products={cartItems} removeFromCart={removeFromCart} />
     </>
   );
 }

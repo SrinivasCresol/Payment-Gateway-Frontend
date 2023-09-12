@@ -8,7 +8,7 @@ export function SocketProvider({ children }) {
 
   useEffect(() => {
     const socket = socketIOClient(
-      "https://react-io-socket-notifications.onrender.com"
+      "https://react-socketio-notifications-backend.vercel.app"
     );
     setSocketInstance(socket);
 

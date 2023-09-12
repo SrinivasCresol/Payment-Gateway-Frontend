@@ -55,7 +55,7 @@ export default function ProductCreate() {
 
       if (response.status === 200) {
         navigate("/admin");
-        socket.emit("adminAction", `${product.model} Added Successfully`);
+        socket.emit("adminAction", `${product.model} Added to Cart`);
       }
     } catch (error) {
       console.error("Product creation error:", error);
