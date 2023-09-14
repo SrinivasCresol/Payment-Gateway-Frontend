@@ -63,3 +63,7 @@ export const deleteProductFunction = async (productId) => {
     {}
   );
 };
+
+export const makePaymentFunction = async (data, header) => {
+  return await commonRequest("POST", `${BASE_URL}/checkout-session`, data, header);
+};

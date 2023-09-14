@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useSocket } from "../ContextProvider/SocketProvider";
 import { useNavigate } from "react-router-dom";
+import { useSocket } from "../ContextProvider/SocketProvider";
 
 export default function SuperAdmin() {
   const [notifications, setNotifications] = useState([]);
@@ -13,16 +13,19 @@ export default function SuperAdmin() {
   };
 
   useEffect(() => {
-    socket.on("adminNotification", (notification) => {
-      setNotifications((prevNotifications) => [
-        ...prevNotifications,
-        notification,
-      ]);
-    });
+    if (socket) {
+      console.log("Socket connected");
+      socket.on("adminNotification", (notification) => {
+        setNotifications((prevNotifications) => [
+          ...prevNotifications,
+          notification,
+        ]);
+      });
 
-    return () => {
-      socket.off("adminNotification");
-    };
+      return () => {
+        socket.off("adminNotification");
+      };
+    }
   }, [socket]);
 
   useEffect(() => {

@@ -1,9 +1,13 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import { loadStripe } from "@stripe/stripe-js";
+import { useSocket } from "../ContextProvider/SocketProvider";
+import { makePaymentFunction } from "../Services/Apis";
 
 export default function Cart({ products, removeFromCart }) {
-  const navigate = useNavigate();
+  const socket = useSocket();
+
+  const handleAction = (action) => {
+    socket.emit("userAction", action);
+  };
 
   const calculateTotal = () => {
     const total = products.reduce((total, item) => {
@@ -14,32 +18,22 @@ export default function Cart({ products, removeFromCart }) {
   };
 
   const handlePayment = async () => {
-    const token = sessionStorage.getItem("userToken");
+    try {
+      const res = await makePaymentFunction(products, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-    if (token) {
-      const stripePromise = await loadStripe(
-        "pk_test_51Np1quSHnUWkZzn7d8tc3ivT8T13kWLEEizX3679LrnocnMHyr7ENWQLFYB2ETw3ejqqys0kJo9QHintcCsmYeov00UbbwmWMQ"
-      );
-      const res = await fetch(
-        "https://payment-gateway-backend-hoj3.onrender.com/create-checkout-session",
-        {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-          },
-          body: JSON.stringify(products),
-        }
-      );
-      if (res.status === 500) return;
-
-      const data = await res.json();
-      console.log(data);
-      const sessionId = data.sessionId;
-      stripePromise.redirectToCheckout({ sessionId });
-    } else {
-      setTimeout(() => {
-        navigate("/");
-      }, 1000);
+      if (res.data.url || res.status === 200) {
+        window.location.href = res.data.url;
+        const notificationMessage = `User purchased the following items: ${products
+          .map((item) => item.model)
+          .join(", ")}`;
+        handleAction(notificationMessage);
+      }
+    } catch (error) {
+      console.error("Error:", error);
     }
   };
 

@@ -9,14 +9,8 @@ export default function Home() {
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
   const navigate = useNavigate();
-  const socket = useSocket();
-
-  const handleAction = (action) => {
-    socket.emit("userAction", action); // Emit the action to the server
-  };
 
   const addToCart = (product) => {
-    handleAction(`User Purchased ${product.model} successfully`);
     const existingItem = cartItems.find((item) => item._id === product._id);
 
     if (existingItem) {
